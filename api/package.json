@@ -1,0 +1,11 @@
+{
+	"name": "cscjobportal",
+	"type": "module",
+	"devDependencies": {
+		"wrangler": "3.22.3"
+	},
+	"dependencies": {
+		"@neondatabase/serverless": "0.9.0",
+		"hono": "4.0.9"
+	}
+}

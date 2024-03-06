@@ -24,28 +24,24 @@ select {
 table {
   margin-top: 15px;
 }
-
 thead {
   position: sticky;
   top: 0;
   z-index: 1;
 }
-
 th {
   background-color: #333333;
   color: white;
 
   padding: 15px;
 }
-
 td {
   padding: 10px;
 }
-
-tr, td {
+/* tr, td {
   width: 200px;
   text-align: center;
-}
+} */
 
 #turtle {
   border: 3px solid #103f1d;

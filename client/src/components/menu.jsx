@@ -3,9 +3,13 @@ export default function Menu({
   onRegionViewChange,
   onPosTitleViewChange,
   onMonSalaryViewChange,
-  // onItemNoViewChange,
+  onItemNoViewChange,
   onClosingDateViewChange,
 }) {
+  function handleChange(e) {
+    console.log(e.target.value)
+  }
+
   return (
     <div id="menu">
       {/* <label>Agency Name: </label>
@@ -4234,11 +4238,11 @@ export default function Menu({
           ZAMBOANGA PENINSULA POLYTECHNIC STATE UNIVERSITY
         </option>
       </select>
-      <br />
+      <br /> */}
 
-      <label>Region: </label>
-      <select>
-        <option value="">All Regions</option>
+      {/* <label>Filter by region: </label>
+      <select onChange={handleChange}>
+        <option value="">All regions</option>
         <option value="NCR">NCR</option>
         <option value="Region I">Region I</option>
         <option value="Region II">Region II</option>
@@ -4278,9 +4282,9 @@ export default function Menu({
       <label htmlFor="mon-salary">Monthly Salary</label>
       <br />
 
-      {/* <input id="item-number" type="checkbox" onChange={onItemNoViewChange} />
+      <input id="item-number" type="checkbox" onChange={onItemNoViewChange} />
       <label htmlFor="item-number">Plantilla Item Number</label>
-      <br /> */}
+      <br />
 
       <input
         id="closing-date"

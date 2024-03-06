@@ -1,0 +1,94 @@
+body {
+  background-color: #e4e4e4;
+}
+
+.page-number {
+  display: inline-block;
+}
+
+a {
+  color: black;
+}
+
+#menu {
+  border: 1px solid black;
+  padding: 10px;
+  margin-bottom: 15px;
+  max-width: 800px;
+}
+
+select {
+  max-width: 100%;
+}
+
+table {
+  margin-top: 15px;
+}
+
+thead {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+th {
+  background-color: #333333;
+  color: white;
+
+  padding: 15px;
+}
+
+td {
+  padding: 10px;
+}
+
+tr, td {
+  width: 200px;
+  text-align: center;
+}
+
+#turtle {
+  border: 3px solid #103f1d;
+  width: 65px;
+  height: 65px;
+  background-color: #7bad18;
+  margin: 16px;
+}
+
+/* source: https://stackoverflow.com/questions/40123695/after-selecting-check-box-instead-of-tick-symbol-need-x-in-html */
+input[type="checkbox"] {
+  -webkit-appearance: initial;
+  appearance: initial;
+  background: gray;
+  width: 15px;
+  height: 15px;
+  border: none;
+  position: relative;
+}
+input[type="checkbox"]:checked {
+  background: red;
+}
+input[type="checkbox"]:checked:after {
+  /* Heres your symbol replacement */
+  content: "X";
+  color: #fff;
+  /* The following positions my tick in the center, 
+   * but you could just overlay the entire box
+   * with a full after element with a background if you want to */
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  /*
+   * If you want to fully change the check appearance, use the following:
+   * content: " ";
+   * width: 100%;
+   * height: 100%;
+   * background: blue;
+   * top: 0;
+   * left: 0;
+   */
+}

@@ -2,30 +2,8 @@ import { useState } from "react";
 import { useLoaderData, useFetcher } from "react-router-dom";
 
 import Menu from "../components/menu";
+import PageNavigator from "../components/page-navigator";
 import JobPostsTable from "../components/job-posts-table";
-
-function mid(a, b) {
-  return Math.floor((a + b) / 2);
-}
-function getPaginationNumbers(currentPage, lastPage) {
-  if (currentPage === 1) {
-    return [1, mid(1, lastPage), lastPage];
-  } else if (currentPage === 2) {
-    return [1, 2, mid(2, lastPage), lastPage];
-  } else if (currentPage === lastPage) {
-    return [1, mid(1, lastPage), lastPage];
-  } else if (currentPage === lastPage - 1) {
-    return [1, mid(1, lastPage - 1), lastPage - 1, lastPage];
-  } else {
-    return [
-      1,
-      mid(1, currentPage),
-      currentPage,
-      mid(currentPage, lastPage),
-      lastPage,
-    ];
-  }
-}
 
 export async function loader({ request }) {
   let queryString = request.url.split("?")[1];
@@ -44,50 +22,24 @@ export default function Root() {
   let loaderData = useLoaderData();
   let fetcher = useFetcher();
 
-  const jobsPerPage = 10;
-  const [currPage, setCurrPage] = useState(1);
-  const lastPage = Math.ceil(
-    (fetcher.data ? fetcher.data.totalPosts : loaderData.totalPosts) /
-      jobsPerPage
-  );
-  const [pagination, setPagination] = useState(
-    getPaginationNumbers(currPage, lastPage)
-  );
+  const jobPostsPerPage = 10;
+  const [currentPage, setCurrentPage] = useState(1);
 
-  let handlePageClick = (e) => {
+  let handlePageNavigation = (e) => {
     if (e.target.value === "prev") {
-      fetcher.submit({ p: currPage - 1 }, { method: "GET", action: "/" });
-      setCurrPage(currPage - 1);
-      setPagination(getPaginationNumbers(currPage - 1, lastPage));
+      setCurrentPage(currentPage - 1);
+      fetcher.submit({ p: currentPage - 1 }, { method: "GET", action: "/" });
     } else if (e.target.value === "next") {
-      fetcher.submit({ p: currPage + 1 }, { method: "GET", action: "/" });
-      setCurrPage(currPage + 1);
-      setPagination(getPaginationNumbers(currPage + 1, lastPage));
+      setCurrentPage(currentPage + 1);
+      fetcher.submit({ p: currentPage + 1 }, { method: "GET", action: "/" });
     } else {
-      setCurrPage(parseInt(e.target.value));
-      setPagination(getPaginationNumbers(parseInt(e.target.value), lastPage));
+      setCurrentPage(parseInt(e.target.value));
       fetcher.submit(
         { p: parseInt(e.target.value) },
         { method: "GET", action: "/" }
       );
     }
   };
-
-  const pages = pagination.map((page, index) => (
-    <div key={index} className="page-number">
-      <button
-        className="page-number"
-        value={page}
-        onClick={handlePageClick}
-        disabled={currPage === page ? true : false}
-      >
-        {page}
-      </button>
-      {index < pagination.length - 1 && pagination[index + 1] !== page + 1 && (
-        <span>...</span>
-      )}
-    </div>
-  ));
 
   const [actionIsShown, setActionIsShown] = useState(true);
   const [agencyIsShown, setAgencyIsShown] = useState(true);
@@ -141,27 +93,14 @@ export default function Root() {
 
       <Menu handleColViewChange={handleColViewChange} />
 
-      <>
-        <div className="page-number">
-          <button
-            disabled={currPage === 1 ? true : false}
-            value="prev"
-            onClick={handlePageClick}
-          >
-            Previous
-          </button>
-        </div>
-        {pages}
-        <div className="page-number">
-          <button
-            disabled={currPage === lastPage ? true : false}
-            value="next"
-            onClick={handlePageClick}
-          >
-            Next
-          </button>
-        </div>
-      </>
+      <PageNavigator
+        currentPage={currentPage}
+        lastPage={Math.ceil(
+          (fetcher.data ? fetcher.data.totalPosts : loaderData.totalPosts) /
+            jobPostsPerPage
+        )}
+        handlePageNavigation={handlePageNavigation}
+      />
 
       {!fetcher.data ? (
         <JobPostsTable
@@ -202,7 +141,7 @@ export default function Root() {
 
       <hr />
 
-      <div id="turtle"></div>
+      <div id="square"></div>
     </>
   );
 }

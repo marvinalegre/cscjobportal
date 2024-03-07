@@ -1,15 +1,4 @@
-export default function Menu({
-  onAgencyViewChange,
-  onRegionViewChange,
-  onPosTitleViewChange,
-  onMonSalaryViewChange,
-  onItemNoViewChange,
-  onClosingDateViewChange,
-}) {
-  function handleChange(e) {
-    console.log(e.target.value)
-  }
-
+export default function Menu({ handleColViewChange }) {
   return (
     <div id="menu">
       {/* <label>Agency Name: </label>
@@ -4266,32 +4255,44 @@ export default function Menu({
       <label>Columns: </label>
       <br />
 
-      <input id="agency" type="checkbox" onChange={onAgencyViewChange} />
-      <label htmlFor="agency">Agency</label>
+      <input id="action-cb" type="checkbox" onChange={handleColViewChange} />
+      <label htmlFor="action-cb">Action</label>
       <br />
 
-      <input id="region" type="checkbox" onChange={onRegionViewChange} />
-      <label htmlFor="region">Region</label>
+      <input id="agency-cb" type="checkbox" onChange={handleColViewChange} />
+      <label htmlFor="agency-cb">Agency</label>
       <br />
 
-      <input id="pos-title" type="checkbox" onChange={onPosTitleViewChange} />
-      <label htmlFor="pos-title">Position Title</label>
+      <input id="region-cb" type="checkbox" onChange={handleColViewChange} />
+      <label htmlFor="region-cb">Region</label>
       <br />
 
-      <input id="mon-salary" type="checkbox" onChange={onMonSalaryViewChange} />
-      <label htmlFor="mon-salary">Monthly Salary</label>
-      <br />
-
-      <input id="item-number" type="checkbox" onChange={onItemNoViewChange} />
-      <label htmlFor="item-number">Plantilla Item Number</label>
+      <input id="pos-title-cb" type="checkbox" onChange={handleColViewChange} />
+      <label htmlFor="pos-title-cb">Position Title</label>
       <br />
 
       <input
-        id="closing-date"
+        id="mon-salary-cb"
         type="checkbox"
-        onChange={onClosingDateViewChange}
+        onChange={handleColViewChange}
       />
-      <label htmlFor="closing-date">Closing Date</label>
+      <label htmlFor="mon-salary-cb">Monthly Salary</label>
+      <br />
+
+      <input
+        id="item-number-cb"
+        type="checkbox"
+        onChange={handleColViewChange}
+      />
+      <label htmlFor="item-number-cb">Plantilla Item Number</label>
+      <br />
+
+      <input
+        id="closing-date-cb"
+        type="checkbox"
+        onChange={handleColViewChange}
+      />
+      <label htmlFor="closing-date-cb">Closing Date</label>
       <br />
 
       {/* <label>Rows: </label>

@@ -31,7 +31,9 @@ export async function loader({ request }) {
   if (!queryString) {
     data = await fetch(`${import.meta.env.VITE_BE_SERVER}/jobposts?p=1`);
   } else {
-    data = await fetch(`${import.meta.env.VITE_BE_SERVER}/jobposts?${queryString}`);
+    data = await fetch(
+      `${import.meta.env.VITE_BE_SERVER}/jobposts?${queryString}`
+    );
   }
   return data;
 }
@@ -43,7 +45,8 @@ export default function Root() {
   const jobsPerPage = 10;
   const [currPage, setCurrPage] = useState(1);
   const lastPage = Math.ceil(
-    (fetcher.data ? fetcher.data.totalPosts : loaderData.totalPosts) / jobsPerPage
+    (fetcher.data ? fetcher.data.totalPosts : loaderData.totalPosts) /
+      jobsPerPage
   );
   const [pagination, setPagination] = useState(
     getPaginationNumbers(currPage, lastPage)
@@ -51,17 +54,11 @@ export default function Root() {
 
   let handlePageClick = (e) => {
     if (e.target.value === "prev") {
-      fetcher.submit(
-        { p: currPage - 1 },
-        { method: "GET", action: "/" }
-      );
+      fetcher.submit({ p: currPage - 1 }, { method: "GET", action: "/" });
       setCurrPage(currPage - 1);
       setPagination(getPaginationNumbers(currPage - 1, lastPage));
     } else if (e.target.value === "next") {
-      fetcher.submit(
-        { p: currPage + 1 },
-        { method: "GET", action: "/" }
-      );
+      fetcher.submit({ p: currPage + 1 }, { method: "GET", action: "/" });
       setCurrPage(currPage + 1);
       setPagination(getPaginationNumbers(currPage + 1, lastPage));
     } else {
@@ -90,53 +87,37 @@ export default function Root() {
     </div>
   ));
 
-  const [agencyView, setAgencyView] = useState("");
-  const [regionView, setRegionView] = useState("");
-  const [posTitleView, setPosTitleView] = useState("");
-  const [monSalaryView, setMonSalaryView] = useState("");
-  const [itemNoView, setItemNoView] = useState("");
-  const [closingDateView, setClosingDateView] = useState("");
+  const [actionIsShown, setActionIsShown] = useState(true);
+  const [agencyIsShown, setAgencyIsShown] = useState(true);
+  const [regionIsShown, setRegionIsShown] = useState(true);
+  const [posTitleIsShown, setPosTitleIsShown] = useState(true);
+  const [monSalaryIsShown, setMonSalaryIsShown] = useState(true);
+  const [itemNoIsShown, setItemNoIsShown] = useState(true);
+  const [cloDateIsShown, setCloDateIsShown] = useState(true);
 
-  function handleAgencyViewChange() {
-    if (!agencyView) {
-      setAgencyView("none");
-    } else {
-      setAgencyView("");
-    }
-  }
-  function handleRegionViewChange() {
-    if (!regionView) {
-      setRegionView("none");
-    } else {
-      setRegionView("");
-    }
-  }
-  function handlePosTitleViewChange() {
-    if (!posTitleView) {
-      setPosTitleView("none");
-    } else {
-      setPosTitleView("");
-    }
-  }
-  function handleMonSalaryViewChange() {
-    if (!monSalaryView) {
-      setMonSalaryView("none");
-    } else {
-      setMonSalaryView("");
-    }
-  }
-  function handleItemNoViewChange() {
-    if (!itemNoView) {
-      setItemNoView("none");
-    } else {
-      setItemNoView("");
-    }
-  }
-  function handleClosingDateViewChange() {
-    if (!closingDateView) {
-      setClosingDateView("none");
-    } else {
-      setClosingDateView("");
+  function handleColViewChange(e) {
+    switch (e.target.id) {
+      case "action-cb":
+        setActionIsShown(!actionIsShown);
+        break;
+      case "agency-cb":
+        setAgencyIsShown(!agencyIsShown);
+        break;
+      case "region-cb":
+        setRegionIsShown(!regionIsShown);
+        break;
+      case "pos-title-cb":
+        setPosTitleIsShown(!posTitleIsShown);
+        break;
+      case "mon-salary-cb":
+        setMonSalaryIsShown(!monSalaryIsShown);
+        break;
+      case "item-number-cb":
+        setItemNoIsShown(!itemNoIsShown);
+        break;
+      case "closing-date-cb":
+        setCloDateIsShown(!cloDateIsShown);
+        break;
     }
   }
 
@@ -153,7 +134,7 @@ export default function Root() {
 
   const jobs = loaderData.requestedPosts.map((job) => (
     <tr key={job.job_post_id}>
-      <td>
+      <td style={{ display: actionIsShown ? "" : "none" }}>
         <a
           id="foo"
           href={`https://csc.gov.ph/career/jobs/` + job.job_post_id}
@@ -162,27 +143,31 @@ export default function Root() {
           Get details
         </a>
       </td>
-      <td style={{ display: agencyView }}>{job.agency}</td>
-      <td style={{ display: regionView }}>{job.region}</td>
-      <td style={{ display: posTitleView }}>{job.position_title}</td>
-      <td style={{ display: monSalaryView }}>
+      <td style={{ display: agencyIsShown ? "" : "none" }}>{job.agency}</td>
+      <td style={{ display: regionIsShown ? "" : "none" }}>{job.region}</td>
+      <td style={{ display: posTitleIsShown ? "" : "none" }}>
+        {job.position_title}
+      </td>
+      <td style={{ display: monSalaryIsShown ? "" : "none" }}>
         Php {formatNumberWithCommas(job.monthly_salary.slice(0, -2))}
       </td>
-      <td style={{ display: itemNoView }}>{job.plantilla_item_no}</td>
-      <td style={{ display: closingDateView }}>{job.closing_date.slice(0, 10)}</td>
+      <td style={{ display: itemNoIsShown ? "" : "none" }}>
+        {job.plantilla_item_no}
+      </td>
+      <td style={{ display: cloDateIsShown ? "" : "none" }}>
+        {job.closing_date.slice(0, 10)}
+      </td>
     </tr>
   ));
 
   return (
     <>
       <>
-        <h1>
-          CSC Job Portal (demo)
-        </h1>
+        <h1>CSC Job Portal (demo)</h1>
 
         <p>
-          Note: This website, like every, may contain incomplete and/or inaccurate
-          information.
+          Note: This website, like every, may contain incomplete and/or
+          inaccurate information.
         </p>
 
         <p>
@@ -193,14 +178,7 @@ export default function Root() {
         </p>
       </>
 
-      <Menu
-        onRegionViewChange={handleRegionViewChange}
-        onAgencyViewChange={handleAgencyViewChange}
-        onPosTitleViewChange={handlePosTitleViewChange}
-        onMonSalaryViewChange={handleMonSalaryViewChange}
-        onItemNoViewChange={handleItemNoViewChange}
-        onClosingDateViewChange={handleClosingDateViewChange}
-      />
+      <Menu handleColViewChange={handleColViewChange} />
 
       <>
         <div className="page-number">
@@ -223,18 +201,42 @@ export default function Root() {
           </button>
         </div>
       </>
-      
 
       <table>
         <thead>
           <tr>
-            <th style={{ width: '80px' }}>Action</th>
-            <th style={{ width: '250px', display: agencyView }}>Agency</th>
-            <th style={{ width: '80px', display: regionView }}>Region</th>
-            <th style={{ width: '350px', display: posTitleView }}>Position Title</th>
-            <th style={{ width: '120px', display: monSalaryView }}>Monthly Salary</th>
-            <th style={{ display: itemNoView }}>Plantilla Item Number</th>
-            <th style={{ width: '90px', display: closingDateView }}>Closing Date</th>
+            <th style={{ width: "80px", display: actionIsShown ? "" : "none" }}>
+              Action
+            </th>
+            <th
+              style={{ width: "250px", display: agencyIsShown ? "" : "none" }}
+            >
+              Agency
+            </th>
+            <th style={{ width: "80px", display: regionIsShown ? "" : "none" }}>
+              Region
+            </th>
+            <th
+              style={{ width: "350px", display: posTitleIsShown ? "" : "none" }}
+            >
+              Position Title
+            </th>
+            <th
+              style={{
+                width: "120px",
+                display: monSalaryIsShown ? "" : "none",
+              }}
+            >
+              Monthly Salary
+            </th>
+            <th style={{ display: itemNoIsShown ? "" : "none" }}>
+              Plantilla Item Number
+            </th>
+            <th
+              style={{ width: "90px", display: cloDateIsShown ? "" : "none" }}
+            >
+              Closing Date
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -242,7 +244,7 @@ export default function Root() {
             ? jobs
             : fetcher.data.requestedPosts.map((job) => (
                 <tr key={job.job_post_id}>
-                  <td>
+                  <td style={{ display: actionIsShown ? "" : "none" }}>
                     <a
                       id="foo"
                       href={`https://csc.gov.ph/career/jobs/` + job.job_post_id}
@@ -251,16 +253,23 @@ export default function Root() {
                       Get details
                     </a>
                   </td>
-                  <td style={{ display: agencyView }}>{job.agency}</td>
-                  <td style={{ display: regionView }}>{job.region}</td>
-                  <td style={{ display: posTitleView }}>
+                  <td style={{ display: agencyIsShown ? "" : "none" }}>
+                    {job.agency}
+                  </td>
+                  <td style={{ display: regionIsShown ? "" : "none" }}>
+                    {job.region}
+                  </td>
+                  <td style={{ display: posTitleIsShown ? "" : "none" }}>
                     {job.position_title}
                   </td>
-                  <td style={{ display: monSalaryView }}>
-                    Php {formatNumberWithCommas(job.monthly_salary.slice(0, -2))}
+                  <td style={{ display: monSalaryIsShown ? "" : "none" }}>
+                    Php{" "}
+                    {formatNumberWithCommas(job.monthly_salary.slice(0, -2))}
                   </td>
-                  <td style={{ display: itemNoView }}>{job.plantilla_item_no}</td>
-                  <td style={{ display: closingDateView }}>
+                  <td style={{ display: itemNoIsShown ? "" : "none" }}>
+                    {job.plantilla_item_no}
+                  </td>
+                  <td style={{ display: cloDateIsShown ? "" : "none" }}>
                     {job.closing_date.slice(0, 10)}
                   </td>
                 </tr>
@@ -272,8 +281,9 @@ export default function Root() {
         <hr />
 
         <p>
-          For any feature requests, feedbacks, bug reports, etc., you can reach me
-          at <a href="mailto:marvinalegre@skiff.com">marvinalegre@skiff.com</a>.
+          For any feature requests, feedbacks, bug reports, etc., you can reach
+          me at{" "}
+          <a href="mailto:marvinalegre@skiff.com">marvinalegre@skiff.com</a>.
         </p>
         <p>
           This project's repo is at{" "}
